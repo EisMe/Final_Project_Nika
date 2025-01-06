@@ -22,7 +22,19 @@ namespace Final_Project_Nika.Controllers
         public async Task<IActionResult> Index()
         {
             var adventureWorksLTDbContext = _context.ProductCategories
-                .Include(p => p.ParentProductCategory);
+                    .Select(c => new ProductCategory
+                    {
+                        ProductCategoryId = c.ProductCategoryId,
+                        Name = c.Name,
+                        ProductCount = _context.Products.Count(p => p.ProductCategoryId == c.ProductCategoryId) +
+                          _context.Products
+                              .Where(p => _context.ProductCategories
+                                  .Where(pc => pc.ParentProductCategoryId == c.ProductCategoryId)
+                                  .Select(pc => pc.ProductCategoryId)
+                                  .ToList()
+                                  .Contains((int)p.ProductCategoryId))
+                              .Count()
+                    });
 
 
             return View(await adventureWorksLTDbContext.ToListAsync());
@@ -140,6 +152,9 @@ namespace Final_Project_Nika.Controllers
                 return NotFound();
             }
 
+            bool hasProducts = _context.Products.Any(p => p.ProductCategoryId == id);
+            ViewBag.HasProducts = hasProducts;
+
             return View(productCategory);
         }
 
@@ -149,6 +164,13 @@ namespace Final_Project_Nika.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var productCategory = await _context.ProductCategories.FindAsync(id);
+
+            if (_context.Products.Any(p => p.ProductCategoryId == id))
+            {
+                TempData["Error"] = "Cannot delete category with existing products.";
+                return RedirectToAction(nameof(Index));
+            }
+
             if (productCategory != null)
             {
                 _context.ProductCategories.Remove(productCategory);

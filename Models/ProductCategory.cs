@@ -10,6 +10,8 @@ namespace Final_Project_Nika.Models;
 /// </summary>
 public partial class ProductCategory
 {
+    internal int ProductCount;
+
     /// <summary>
     /// Primary key for ProductCategory records.
     /// </summary>

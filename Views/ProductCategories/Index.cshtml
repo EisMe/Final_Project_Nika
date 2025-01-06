@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                0
+                    @Html.DisplayFor(modelItem => item.ProductCount)
             </td>
             <td>
                 <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.ProductCategoryId">Edit</a> |
