@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Final_Project_Nika.Models.ProductCategory>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Total Items
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                0
+            </td>
+            <td>
+                <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.ProductCategoryId">Edit</a> |
+                    <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.ProductCategoryId">Details</a> |
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.ProductCategoryId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
