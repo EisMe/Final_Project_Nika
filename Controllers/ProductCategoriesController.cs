@@ -153,8 +153,9 @@ namespace Final_Project_Nika.Controllers
             }
 
             bool hasProducts = _context.Products.Any(p => p.ProductCategoryId == id);
+            bool hasSubCategories = _context.ProductCategories.Any(c => c.ParentProductCategoryId == id);
             ViewBag.HasProducts = hasProducts;
-
+            ViewBag.HasSubCategories = hasSubCategories;
             return View(productCategory);
         }
 
@@ -168,6 +169,11 @@ namespace Final_Project_Nika.Controllers
             if (_context.Products.Any(p => p.ProductCategoryId == id))
             {
                 TempData["Error"] = "Cannot delete category with existing products.";
+                return RedirectToAction(nameof(Index));
+            }
+            else if(_context.ProductCategories.Any(c => c.ParentProductCategoryId == id))
+            {
+                TempData["Error"] = "Cannot delete category with subcategories.";
                 return RedirectToAction(nameof(Index));
             }
 
