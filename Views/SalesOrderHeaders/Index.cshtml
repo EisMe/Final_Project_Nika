@@ -15,7 +15,7 @@
             <th>@Html.DisplayNameFor(model => model.OrderDate)</th>
             <th>@Html.DisplayNameFor(model => model.SalesOrderNumber)</th>
             <th>@Html.DisplayNameFor(model => model.Status)</th>
-            <th>@Html.DisplayNameFor(model => model.Customer.FirstName)</th>
+            <th>Name</th>
             <th>@Html.DisplayNameFor(model => model.TotalDue)</th>
             <th>Actions</th>
         </tr>
@@ -27,7 +27,11 @@
                 <td>@Html.DisplayFor(modelItem => item.OrderDate)</td>
                 <td>@Html.DisplayFor(modelItem => item.SalesOrderNumber)</td>
                 <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                <td>@Html.DisplayFor(modelItem => item.Customer.FirstName)</td>
+                <td>@{
+						var fullName = item.Customer?.FirstName + " " + item.Customer?.LastName;
+                    }
+                    @fullName
+                </td>
                 <td>@Html.DisplayFor(modelItem => item.TotalDue)</td>
                 <td>
                     <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.SalesOrderId">Edit</a> |

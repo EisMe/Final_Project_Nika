@@ -62,6 +62,7 @@ namespace Final_Project_Nika.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SalesOrderId,RevisionNumber,OrderDate,DueDate,ShipDate,Status,OnlineOrderFlag,SalesOrderNumber,PurchaseOrderNumber,AccountNumber,CustomerId,ShipToAddressId,BillToAddressId,ShipMethod,CreditCardApprovalCode,SubTotal,TaxAmt,Freight,TotalDue,Comment,Rowguid,ModifiedDate")] SalesOrderHeader salesOrderHeader)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(salesOrderHeader);
@@ -148,6 +149,7 @@ namespace Final_Project_Nika.Controllers
             {
                 return NotFound();
             }
+            
 
             return View(salesOrderHeader);
         }
@@ -160,7 +162,12 @@ namespace Final_Project_Nika.Controllers
             var salesOrderHeader = await _context.SalesOrderHeaders.FindAsync(id);
             if (salesOrderHeader != null)
             {
+                foreach (var detail in salesOrderHeader.SalesOrderDetails)
+                {
+                    _context.SalesOrderDetails.Remove(detail);
+                }
                 _context.SalesOrderHeaders.Remove(salesOrderHeader);
+
             }
 
             await _context.SaveChangesAsync();
