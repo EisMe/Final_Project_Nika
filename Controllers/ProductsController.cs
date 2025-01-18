@@ -22,7 +22,7 @@ namespace Final_Project_Nika.Controllers
         public async Task<IActionResult> Index()
         {
             var adventureWorksLTDbContext = _context.Products
-                .Take(30)
+                .Take(20)
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductModel);
             return View(await adventureWorksLTDbContext.ToListAsync());
@@ -141,6 +141,10 @@ namespace Final_Project_Nika.Controllers
                 .Include(p => p.ProductCategory)
                 .Include(p => p.ProductModel)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
+
+            bool hasOrders = _context.SalesOrderDetails.Any(p => p.ProductId == id);
+            ViewBag.HasOrders = hasOrders;
+
             if (product == null)
             {
                 return NotFound();
@@ -158,6 +162,11 @@ namespace Final_Project_Nika.Controllers
             if (product != null)
             {
                 _context.Products.Remove(product);
+            }
+            if(_context.SalesOrderDetails.Any(p => p.ProductId == id))
+            {
+                TempData["Error"] = "Cannot delete product with existing orders.";
+                return RedirectToAction(nameof(Index));
             }
 
             await _context.SaveChangesAsync();
