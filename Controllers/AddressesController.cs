@@ -17,6 +17,10 @@ namespace Final_Project_Nika.Controllers
         {
             _context = context;
         }
+        private void SetModifiedDate(Address address)
+        {
+            address.ModifiedDate = DateTime.Now;
+        }
 
         // GET: Addresses
         public async Task<IActionResult> Index()
@@ -96,6 +100,7 @@ namespace Final_Project_Nika.Controllers
             {
                 try
                 {
+                    SetModifiedDate(address);
                     _context.Update(address);
                     await _context.SaveChangesAsync();
                 }

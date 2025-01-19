@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Final_Project_Nika.Models;
 
@@ -13,6 +14,7 @@ public partial class Product
     /// <summary>
     /// Primary key for Product records.
     /// </summary>
+    [Key]
     public int ProductId { get; set; }
 
     /// <summary>
@@ -33,11 +35,15 @@ public partial class Product
     /// <summary>
     /// Standard cost of the product.
     /// </summary>
+    [Required(ErrorMessage = "Standard Cost is required.")]
+    [Range(0, double.MaxValue, ErrorMessage = "Standard Cost must be a positive number.")]
     public decimal StandardCost { get; set; }
 
     /// <summary>
     /// Selling price.
     /// </summary>
+    [Required(ErrorMessage = "List Price is required.")]
+    [Range(0, double.MaxValue, ErrorMessage = "List Price must be a positive number.")]
     public decimal ListPrice { get; set; }
 
     /// <summary>
@@ -63,7 +69,7 @@ public partial class Product
     /// <summary>
     /// Date the product was available for sale.
     /// </summary>
-    public DateTime SellStartDate { get; set; }
+    public DateTime SellStartDate { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Date the product was no longer available for sale.

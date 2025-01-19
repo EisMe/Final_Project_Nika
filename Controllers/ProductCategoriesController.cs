@@ -18,6 +18,10 @@ namespace Final_Project_Nika.Controllers
             _context = context;
         }
 
+        private void SetModifiedDate(ProductCategory cat)
+        {
+            cat.ModifiedDate = DateTime.UtcNow;
+        }
         // GET: ProductCategories
         public async Task<IActionResult> Index()
         {
@@ -116,6 +120,7 @@ namespace Final_Project_Nika.Controllers
             {
                 try
                 {
+                    SetModifiedDate(productCategory);
                     _context.Update(productCategory);
                     await _context.SaveChangesAsync();
                 }

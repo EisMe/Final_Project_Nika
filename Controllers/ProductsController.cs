@@ -12,7 +12,7 @@ public class ProductsController : Controller
         _context = context;
     }
 
-    // Helper method to set ModifiedDate
+    // Helper method
     private void SetModifiedDate(Product product)
     {
         product.ModifiedDate = DateTime.UtcNow;

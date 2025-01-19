@@ -17,7 +17,10 @@ namespace Final_Project_Nika.Controllers
         {
             _context = context;
         }
-
+        private void SetModifiedDate(Customer customer)
+        {
+            customer.ModifiedDate = DateTime.Now;
+        }
         // GET: Customers
         public async Task<IActionResult> Index()
         {
@@ -96,6 +99,7 @@ namespace Final_Project_Nika.Controllers
             {
                 try
                 {
+                    SetModifiedDate(customer);
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }

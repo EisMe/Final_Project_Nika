@@ -1,5 +1,7 @@
 using Final_Project_Nika.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Final_Project_Nika
 {
@@ -8,6 +10,9 @@ namespace Final_Project_Nika
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var cultureInfo = new CultureInfo("ka-KA");
+            cultureInfo.NumberFormat.CurrencyDecimalSeparator = ",";
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ",";
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -23,6 +28,13 @@ namespace Final_Project_Nika
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(cultureInfo),
+                SupportedCultures = new List<CultureInfo> { cultureInfo },
+                SupportedUICultures = new List<CultureInfo> { cultureInfo }
+            });
 
             app.UseHttpsRedirection();
             app.UseRouting();
