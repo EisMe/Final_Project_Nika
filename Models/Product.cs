@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Final_Project_Nika.Models;
 
@@ -117,6 +118,9 @@ public partial class Product
     [Required]
     [DataType(DataType.DateTime)]
     public DateTime ModifiedDate { get; set; }
+
+    [NotMapped]
+    public int OrderCount { get; set; } = 0;
 
     public virtual ProductCategory ProductCategory { get; set; }
 

@@ -21,12 +21,36 @@ public class ProductsController : Controller
     // GET: Products
     public async Task<IActionResult> Index()
     {
-        var adventureWorksLTDbContext = _context.Products
+        var products = await _context.Products
             .Take(20)
             .Include(p => p.ProductCategory)
-            .Include(p => p.ProductModel);
-        return View(await adventureWorksLTDbContext.ToListAsync());
+            .Include(p => p.ProductModel)
+            .Select(p => new
+            {
+                Product = p,
+                OrderCount = _context.SalesOrderDetails
+                    .Count(od => od.ProductId == p.ProductId)
+            })
+            .ToListAsync();
+
+        var productsWithOrderCount = products.Select(p => {
+            p.Product.OrderCount = p.OrderCount; // Assuming you have an OrderCount property in Product model
+            return p.Product;
+        });
+
+        return View(productsWithOrderCount);
     }
+    //public async Task<IActionResult> Index()
+    //{
+    //    // include order count, how many times this product was ordered
+    //    var adventureWorksLTDbContext = _context.Products
+    //        .Take(20)
+    //        .Include(p => p.ProductCategory)
+    //        .Include(p => p.ProductModel);
+
+
+    //    return View(await adventureWorksLTDbContext.ToListAsync());
+    //}
 
     // GET: Products/Details/5
     public async Task<IActionResult> Details(int? id)
