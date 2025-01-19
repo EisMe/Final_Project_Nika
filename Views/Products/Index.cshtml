@@ -57,9 +57,10 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.ListPrice)
 				</td>
-				@* <td> *@
-				@*     @Html.DisplayFor(modelItem => item.ThumbNailPhoto) *@
-				@* </td> *@
+			
+				<td>
+					<partial name="_ProductImage" model="@item" />
+				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.ProductCategory.Name)
 				</td>

@@ -18,6 +18,27 @@ public class ProductsController : Controller
         product.ModifiedDate = DateTime.UtcNow;
     }
 
+    private async Task<byte[]> ConvertToBytes(IFormFile image)
+    {
+        if (image == null) return null;
+
+        using (var memoryStream = new MemoryStream())
+        {
+            await image.CopyToAsync(memoryStream);
+            return memoryStream.ToArray();
+        }
+    }
+
+    public IActionResult GetImage(int id)
+    {
+        var product = _context.Products.Find(id);
+        if (product?.ThumbNailPhoto == null)
+        {
+            return NotFound();
+        }
+        return File(product.ThumbNailPhoto, "image/jpeg");
+    }
+
     // GET: Products
     public async Task<IActionResult> Index()
     {
@@ -40,17 +61,7 @@ public class ProductsController : Controller
 
         return View(productsWithOrderCount);
     }
-    //public async Task<IActionResult> Index()
-    //{
-    //    // include order count, how many times this product was ordered
-    //    var adventureWorksLTDbContext = _context.Products
-    //        .Take(20)
-    //        .Include(p => p.ProductCategory)
-    //        .Include(p => p.ProductModel);
 
-
-    //    return View(await adventureWorksLTDbContext.ToListAsync());
-    //}
 
     // GET: Products/Details/5
     public async Task<IActionResult> Details(int? id)
@@ -83,10 +94,15 @@ public class ProductsController : Controller
     // POST: Products/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product)
+    public async Task<IActionResult> Create([Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product, IFormFile imageFile)
     {
         if (ModelState.IsValid)
         {
+            if (imageFile != null)
+            {
+                product.ThumbNailPhoto = await ConvertToBytes(imageFile);
+                product.ThumbnailPhotoFileName = imageFile.FileName;
+            }
             SetModifiedDate(product); // Set ModifiedDate here before saving
 
             _context.Add(product);
@@ -119,7 +135,7 @@ public class ProductsController : Controller
     // POST: Products/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product)
+    public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,ProductNumber,Color,StandardCost,ListPrice,Size,Weight,ProductCategoryId,ProductModelId,SellStartDate,SellEndDate,DiscontinuedDate,ThumbNailPhoto,ThumbnailPhotoFileName,Rowguid,ModifiedDate")] Product product, IFormFile imageFile)
     {
         if (id != product.ProductId)
         {
@@ -130,6 +146,21 @@ public class ProductsController : Controller
         {
             try
             {
+                if (imageFile != null)
+                {
+                    product.ThumbNailPhoto = await ConvertToBytes(imageFile);
+                    product.ThumbnailPhotoFileName = imageFile.FileName;
+                }
+                else
+                {
+                    // Keep existing image if no new image is uploaded
+                    var existingProduct = await _context.Products
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(p => p.ProductId == id);
+                    product.ThumbNailPhoto = existingProduct.ThumbNailPhoto;
+                    product.ThumbnailPhotoFileName = existingProduct.ThumbnailPhotoFileName;
+                }
+
                 SetModifiedDate(product); // Set ModifiedDate here before saving
 
                 _context.Update(product);
