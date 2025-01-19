@@ -1,32 +1,103 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model dynamic
 @{
-	ViewData["Title"] = "Index";
+    ViewData["Title"] = "Sales Reports";
+    var reportType = ViewBag.ReportType;
 }
-	<title>Reports</title>
 
-	<style>
-		table {
-			border-collapse: collapse;
-			width: 100%;
-		}
+<h1>Sales Reports</h1>
 
-		th, td {
-			text-align: left;
-			padding: 8px;
-		}
+<div class="mb-4">
+    <label class="form-label">Select Report:</label>
+    <select id="reportSelect" class="form-select" onchange="window.location.href='?reportType=' + this.value">
+        <option value="YearMonth" selected="@(reportType == "YearMonth")">Sales by Year and Month</option>
+        <option value="Products" selected="@(reportType == "Products")">Sales by Products</option>
+        <option value="Categories" selected="@(reportType == "Categories")">Sales by Categories</option>
+        <option value="CustomerYear" selected="@(reportType == "CustomerYear")">Sales by Customers and Years</option>
+        <option value="City" selected="@(reportType == "City")">Sales by City</option>
+        <option value="Top10Customers" selected="@(reportType == "Top10Customers")">Top 10 Customers</option>
+        <option value="Top10CustomersByYear" selected="@(reportType == "Top10CustomersByYear")">Top 10 Customers by Year</option>
+        <option value="Top10Products" selected="@(reportType == "Top10Products")">Top 10 Products</option>
+        <option value="Top10ProductsByProfit" selected="@(reportType == "Top10ProductsByProfit")">Top 10 Products by Profit</option>
+        <option value="Top10ProductsByYear" selected="@(reportType == "Top10ProductsByYear")">Top 10 Products by Year</option>
+    </select>
+</div>
 
-		tr:nth-child(even) {
-			background-color: #f2f2f2;
-		}
-
-		th {
-			background-color: #4CAF50;
-			color: white;
-		}
-
-	</style>
-
-
-
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            @switch (reportType)
+            {
+                case "YearMonth":
+                    <tr>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Total Sales</th>
+                    </tr>
+                    break;
+                case "Products":
+                case "Categories":
+                case "City":
+                case "Top10Products":
+                    <tr>
+                        <th>Name</th>
+                        <th>Total Sales</th>
+                    </tr>
+                    break;
+                case "CustomerYear":
+                case "Top10CustomersByYear":
+                case "Top10ProductsByYear":
+                    <tr>
+                        <th>Name</th>
+                        <th>Year</th>
+                        <th>Total Sales</th>
+                    </tr>
+                    break;
+                case "Top10ProductsByProfit":
+                    <tr>
+                        <th>Product</th>
+                        <th>Total Profit</th>
+                    </tr>
+                    break;
+            }
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                @switch (reportType)
+                {
+                    case "YearMonth":
+                        <tr>
+                            <td>@item.Year</td>
+                            <td>@item.Month</td>
+                            <td>@item.TotalSales.ToString("C")</td>
+                        </tr>
+                        break;
+                    case "Products":
+                    case "Categories":
+                    case "City":
+                    case "Top10Products":
+                        <tr>
+                            <td>@(item.ProductName ?? item.CategoryName ?? item.City)</td>
+                            <td>@item.TotalSales.ToString("C")</td>
+                        </tr>
+                        break;
+                    case "CustomerYear":
+                    case "Top10CustomersByYear":
+                    case "Top10ProductsByYear":
+                        <tr>
+                            <td>@(item.CustomerName ?? item.ProductName)</td>
+                            <td>@item.Year</td>
+                            <td>@item.TotalSales.ToString("C")</td>
+                        </tr>
+                        break;
+                    case "Top10ProductsByProfit":
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.TotalProfit.ToString("C")</td>
+                        </tr>
+                        break;
+                }
+            }
+        </tbody>
+    </table>
+</div>

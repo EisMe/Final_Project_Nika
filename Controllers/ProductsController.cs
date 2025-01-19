@@ -151,15 +151,6 @@ public class ProductsController : Controller
                     product.ThumbNailPhoto = await ConvertToBytes(imageFile);
                     product.ThumbnailPhotoFileName = imageFile.FileName;
                 }
-                else
-                {
-                    // Keep existing image if no new image is uploaded
-                    var existingProduct = await _context.Products
-                        .AsNoTracking()
-                        .FirstOrDefaultAsync(p => p.ProductId == id);
-                    product.ThumbNailPhoto = existingProduct.ThumbNailPhoto;
-                    product.ThumbnailPhotoFileName = existingProduct.ThumbnailPhotoFileName;
-                }
 
                 SetModifiedDate(product); // Set ModifiedDate here before saving
 

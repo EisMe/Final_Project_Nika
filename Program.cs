@@ -2,6 +2,8 @@ using Final_Project_Nika.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Final_Project_Nika
 {
@@ -19,7 +21,15 @@ namespace Final_Project_Nika
             var connectionString = builder.Configuration.GetConnectionString("DefaultDb");
             builder.Services.AddDbContext<AdventureWorksLTDbContext>(x => x.UseSqlServer(connectionString));
 
+            Log.Logger = new LoggerConfiguration()
+            .WriteTo.File("Logs/app.log", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
+            // Add Serilog to the logging pipeline
+            builder.Host.UseSerilog();
             var app = builder.Build();
+
+            app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -35,6 +45,7 @@ namespace Final_Project_Nika
                 SupportedCultures = new List<CultureInfo> { cultureInfo },
                 SupportedUICultures = new List<CultureInfo> { cultureInfo }
             });
+
 
             app.UseHttpsRedirection();
             app.UseRouting();
