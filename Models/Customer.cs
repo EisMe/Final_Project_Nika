@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Final_Project_Nika.Models;
 
@@ -13,56 +14,80 @@ public partial class Customer
     /// <summary>
     /// Primary key for Customer records.
     /// </summary>
+    [Key]
     public int CustomerId { get; set; }
 
     /// <summary>
     /// 0 = The data in FirstName and LastName are stored in western style (first name, last name) order.  1 = Eastern style (last name, first name) order.
     /// </summary>
+    [Required]
     public bool NameStyle { get; set; }
 
     /// <summary>
     /// A courtesy title. For example, Mr. or Ms.
     /// </summary>
+    [StringLength(8, ErrorMessage = "Title cannot exceed 8 characters.")]
+
     public string Title { get; set; }
 
     /// <summary>
     /// First name of the person.
     /// </summary>
+    [Required]
+    [StringLength(50, ErrorMessage = "First Name cannot exceed 50 characters.")]
+
     public string FirstName { get; set; }
 
     /// <summary>
     /// Middle name or middle initial of the person.
     /// </summary>
+    [StringLength(50, ErrorMessage = "Middle Name cannot exceed 50 characters.")]
+
     public string MiddleName { get; set; }
 
     /// <summary>
     /// Last name of the person.
     /// </summary>
+    [Required]
+    [StringLength(50, ErrorMessage = "Last Name cannot exceed 50 characters.")]
+
     public string LastName { get; set; }
 
     /// <summary>
     /// Surname suffix. For example, Sr. or Jr.
     /// </summary>
+    [StringLength(10, ErrorMessage = "Suffix cannot exceed 10 characters.")]
+
     public string Suffix { get; set; }
 
     /// <summary>
     /// The customer&apos;s organization.
     /// </summary>
+    [StringLength(128, ErrorMessage = "Company Name cannot exceed 128 characters.")]
+
     public string CompanyName { get; set; }
 
     /// <summary>
     /// The customer&apos;s sales person, an employee of AdventureWorks Cycles.
     /// </summary>
+    [StringLength(256, ErrorMessage = "Sales Person cannot exceed 256 characters.")]
+
     public string SalesPerson { get; set; }
 
     /// <summary>
     /// E-mail address for the person.
     /// </summary>
+    [EmailAddress]
+    [StringLength(50, ErrorMessage = "Email Address cannot exceed 50 characters.")]
+
     public string EmailAddress { get; set; }
 
     /// <summary>
     /// Phone number associated with the person.
     /// </summary>
+    [Phone]
+    [StringLength(25, ErrorMessage = "Phone cannot exceed 25 characters.")]
+
     public string Phone { get; set; }
 
     /// <summary>
@@ -78,11 +103,14 @@ public partial class Customer
     /// <summary>
     /// ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.
     /// </summary>
+    [Required]
     public Guid Rowguid { get; set; }
 
     /// <summary>
     /// Date and time the record was last updated.
     /// </summary>
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime ModifiedDate { get; set; }
 
     public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();

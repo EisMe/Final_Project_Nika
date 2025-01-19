@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Final_Project_Nika.Models;
 
@@ -13,43 +14,65 @@ public partial class Address
     /// <summary>
     /// Primary key for Address records.
     /// </summary>
+    [Key]
     public int AddressId { get; set; }
 
     /// <summary>
     /// First street address line.
     /// </summary>
+    [Required]
+    [StringLength(60, ErrorMessage = "Address Line 1 cannot exceed 60 characters.")]
+
     public string AddressLine1 { get; set; }
 
     /// <summary>
     /// Second street address line.
     /// </summary>
+    [Required]
+    [StringLength(60, ErrorMessage = "Address Line 2 cannot exceed 60 characters.")]
+
     public string AddressLine2 { get; set; }
 
     /// <summary>
     /// Name of the city.
     /// </summary>
+    [Required]
+    [StringLength(30, ErrorMessage = "City cannot exceed 30 characters.")]
+
     public string City { get; set; }
 
     /// <summary>
     /// Name of state or province.
     /// </summary>
+    [Required]
+    [StringLength(50, ErrorMessage = "State/Province cannot exceed 50 characters.")]
+
     public string StateProvince { get; set; }
+    [Required]
+    [StringLength(50, ErrorMessage = "Country/Region cannot exceed 50 characters.")]
 
     public string CountryRegion { get; set; }
 
     /// <summary>
     /// Postal code for the street address.
     /// </summary>
+    [Required]
+    [StringLength(15, ErrorMessage = "Postal Code cannot exceed 15 characters.")]
+
     public string PostalCode { get; set; }
 
     /// <summary>
     /// ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.
     /// </summary>
+    [Required]
     public Guid Rowguid { get; set; }
 
     /// <summary>
     /// Date and time the record was last updated.
     /// </summary>
+    [Required]
+    [DataType(DataType.DateTime)]
+
     public DateTime ModifiedDate { get; set; }
 
     public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();

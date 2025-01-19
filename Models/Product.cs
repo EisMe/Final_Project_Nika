@@ -20,16 +20,22 @@ public partial class Product
     /// <summary>
     /// Name of the product.
     /// </summary>
+    [Required]
+    [StringLength(50, ErrorMessage = "The Name cannot exceed 50 characters.")]
     public string Name { get; set; }
 
     /// <summary>
     /// Unique product identification number.
     /// </summary>
+    [Required]
+    [StringLength(25, ErrorMessage = "The Product Number cannot exceed 25 characters.")]
     public string ProductNumber { get; set; }
 
     /// <summary>
     /// Product color.
     /// </summary>
+    [StringLength(15, ErrorMessage = "The Color cannot exceed 15 characters.")]
+
     public string Color { get; set; }
 
     /// <summary>
@@ -49,11 +55,14 @@ public partial class Product
     /// <summary>
     /// Product size.
     /// </summary>
+    [StringLength(5, ErrorMessage = "The Size cannot exceed 5 characters.")]
     public string Size { get; set; }
 
     /// <summary>
     /// Product weight.
     /// </summary>
+    [Range(0.0, 9999.99, ErrorMessage = "The Weight must be a positive value with up to 2 decimal places.")]
+
     public decimal? Weight { get; set; }
 
     /// <summary>
@@ -69,16 +78,20 @@ public partial class Product
     /// <summary>
     /// Date the product was available for sale.
     /// </summary>
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime SellStartDate { get; set; } = DateTime.UtcNow;
 
     /// <summary>
     /// Date the product was no longer available for sale.
     /// </summary>
+    [DataType(DataType.DateTime)]
     public DateTime? SellEndDate { get; set; }
 
     /// <summary>
     /// Date the product was discontinued.
     /// </summary>
+    [DataType(DataType.DateTime)]
     public DateTime? DiscontinuedDate { get; set; }
 
     /// <summary>
@@ -89,16 +102,20 @@ public partial class Product
     /// <summary>
     /// Small image file name.
     /// </summary>
+    [StringLength(50, ErrorMessage = "The Thumbnail Photo File Name cannot exceed 50 characters.")]
     public string ThumbnailPhotoFileName { get; set; }
 
     /// <summary>
     /// ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.
     /// </summary>
+    [Required]
     public Guid Rowguid { get; set; }
 
     /// <summary>
     /// Date and time the record was last updated.
     /// </summary>
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime ModifiedDate { get; set; }
 
     public virtual ProductCategory ProductCategory { get; set; }
