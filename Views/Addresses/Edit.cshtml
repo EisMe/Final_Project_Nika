@@ -53,15 +53,13 @@
                 <input asp-for="ModifiedDate" class="form-control" />
                 <span asp-validation-for="ModifiedDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group" style="margin-top:15px">
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@Model?.AddressId">Delete</a> |
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

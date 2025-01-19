@@ -7,34 +7,28 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
-<table class="table">
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine1)
+                Address 1
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine2)
+                Address 2
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.City)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StateProvince)
+                State / Province
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CountryRegion)
+                Country / Region
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rowguid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedDate)
+                Postal Code
             </th>
             <th></th>
         </tr>
@@ -60,17 +54,11 @@
             <td>
                 @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rowguid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AddressId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AddressId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AddressId">Delete</a>
-            </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.AddressId">Edit</a> |
+                    <a asp-action="Details" class="btn btn-secondary" asp-route-id="@item.AddressId">Details</a> |
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.AddressId">Delete</a>
+                </td>
         </tr>
 }
     </tbody>
